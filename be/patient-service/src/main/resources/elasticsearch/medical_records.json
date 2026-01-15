@@ -1,0 +1,30 @@
+{
+  "settings": {
+    "analysis": {
+      "analyzer": {
+        "vn_analyzer": {
+          "tokenizer": "standard",
+          "filter": ["lowercase", "asciifolding"]
+        }
+      }
+    }
+  },
+  "mappings": {
+    "properties": {
+      "id": { "type": "keyword" },
+      "patientId": { "type": "keyword" },
+      "patientCode": { "type": "keyword" },
+      "fullName": {
+        "type": "text",
+        "fields": {
+          "keyword": { "type": "keyword" }
+        }
+      },
+      "dateOfBirth": { "type": "date" },
+      "lastTestDate": { "type": "date" },
+      "status": { "type": "keyword" },
+      "testType": { "type": "keyword" },
+      "instrumentUsed": { "type": "object" , "dynamic": true}
+    }
+  }
+}

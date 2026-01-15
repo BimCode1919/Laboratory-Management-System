@@ -1,0 +1,57 @@
+syntax = "proto3";
+
+option java_multiple_files = true;
+option java_package = "org.overcode250204.common.grpc";
+option java_outer_classname = "WarehouseServiceProto";
+
+package warehouse;
+
+message ReagentRequest {
+  string reagentId = 1;
+}
+
+message ReagentInfo {
+  string reagentId = 1;
+  string name = 2;
+  string catalogNumber = 3;
+  string manufacturer = 4;
+  string casNumber = 5;
+  string createdBy = 6;
+  string updatedBy = 7;
+  string createdAt = 8;
+  string updatedAt = 9;
+  string quantity = 10; // Available quantity as string (BigDecimal serialized)
+  string totalQuantity = 11; // Total quantity as string (BigDecimal serialized)
+  string expirationDate = 12; // Expiration date (ISO-8601 string)
+}
+
+message ListReagentsRequest {
+  int32 page = 1;
+  int32 size = 2;
+}
+
+message ListReagentsResponse {
+  repeated ReagentInfo reagents = 1;
+}
+
+message InstrumentRequest {
+  string instrumentId = 1;
+}
+
+message InstrumentInfo {
+  string instrumentId = 1;
+  string instrumentCode = 2;
+  string name = 3;
+  string model = 4;
+  string serialNumber = 5;
+  string location = 6;
+  string status = 7;
+  string createdAt = 8;
+  string updatedAt = 9;
+}
+
+service WarehouseService {
+  rpc GetReagent(ReagentRequest) returns (ReagentInfo);
+  rpc ListReagents(ListReagentsRequest) returns (ListReagentsResponse);
+  rpc GetInstrument(InstrumentRequest) returns (InstrumentInfo);
+}

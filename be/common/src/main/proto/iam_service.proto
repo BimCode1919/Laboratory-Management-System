@@ -1,0 +1,21 @@
+syntax = "proto3";
+
+option java_multiple_files = true;
+option java_package = "org.overcode250204.common.grpc";
+option java_outer_classname = "IamServiceProto";
+
+package iam;
+
+
+message CognitoSub {
+  string cognito_sub = 1;
+}
+
+message InternalUserProfile {
+  string userId = 1;
+}
+
+
+service IamService {
+  rpc GetUserByCognitoSub(CognitoSub) returns (InternalUserProfile);
+}

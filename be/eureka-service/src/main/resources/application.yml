@@ -1,0 +1,7 @@
+spring:
+  application:
+    name: eureka-service
+  profiles:
+    active: ${PROFILES_ACTIVE}
+  config:
+    import: ${CONFIG_SERVER_URL:configserver:http://localhost:8888}

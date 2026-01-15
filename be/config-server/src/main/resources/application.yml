@@ -1,0 +1,17 @@
+spring:
+  application:
+    name: config-server
+  config:
+    import: optional:file:../laboratory-management-system/.env
+  cloud:
+    config:
+      server:
+        native:
+          searchLocations: file:../be/config-repository
+      retry:
+        max-attempts: 7
+  profiles:
+    active: native
+
+server:
+  port: 8888

@@ -1,0 +1,408 @@
+services:
+  zookeeper:
+    image: confluentinc/cp-zookeeper:7.7.0
+    container_name: zookeeper
+    restart: unless-stopped
+    ports:
+      - "2181:2181"
+    environment:
+      ZOOKEEPER_CLIENT_PORT: 2181
+      ZOOKEEPER_TICK_TIME: 2000
+
+    volumes:
+      - zookeeper_data:/var/lib/zookeeper
+
+  kafka:
+    image: confluentinc/cp-kafka:7.7.0
+    container_name: kafka
+    restart: unless-stopped
+    depends_on:
+      - zookeeper
+    ports:
+      - "9092:9092"
+      - "29092:29092"
+    environment:
+
+      KAFKA_BROKER_ID: 1
+      KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
+
+
+      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: PLAINTEXT:PLAINTEXT,PLAINTEXT_HOST:PLAINTEXT
+      KAFKA_LISTENERS: PLAINTEXT://0.0.0.0:9092,PLAINTEXT_HOST://0.0.0.0:29092
+      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://kafka:9092,PLAINTEXT_HOST://localhost:29092
+      KAFKA_INTER_BROKER_LISTENER_NAME: PLAINTEXT
+
+
+      KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
+      KAFKA_DEFAULT_REPLICATION_FACTOR: 1
+      KAFKA_DELETE_TOPIC_ENABLE: "true"
+      KAFKA_AUTO_CREATE_TOPICS_ENABLE: "true"
+
+      KAFKA_LOG_RETENTION_HOURS: 24
+
+    volumes:
+      - kafka_data:/var/lib/kafka/data
+
+  kafka-ui:
+    image: provectuslabs/kafka-ui:latest
+    container_name: kafka-ui
+    restart: unless-stopped
+    ports:
+      - "9000:8080"
+    environment:
+      KAFKA_CLUSTERS_0_NAME: local
+      KAFKA_CLUSTERS_0_BOOTSTRAPSERVERS: kafka:9092,localhost:29092
+    depends_on:
+      - kafka
+
+  postgres-instrument:
+    image: postgres:15
+    container_name: postgres-instrument
+    restart: always
+    env_file:
+      - instrument_db.env
+    ports:
+      - "5434:5432"
+    volumes:
+      - instrument-db-data:/var/lib/postgresql/data
+
+
+  mongodb-instrument:
+    image: mongo:7
+    container_name: mongodb-instrument
+    restart: always
+    env_file:
+      - instrument_db.env
+    ports:
+      - "27019:27017"
+    volumes:
+      - mongo-instrument-data:/data/db
+
+  postgres-iam:
+    image: postgres:15
+    container_name: postgres-iam
+    restart: always
+    env_file:
+      - iam_db.env
+    ports:
+      - "5431:5432"
+    volumes:
+      - iam-db-data:/var/lib/postgresql/data
+
+
+  postgres-warehouse:
+    image: postgres:15
+    container_name: postgres-warehouse
+    restart: always
+    env_file:
+      - warehouse_db.env
+    ports:
+      - "5433:5432"
+    volumes:
+      - warehouse-db-data:/var/lib/postgresql/data
+
+  mongodb-monitoring:
+    image: mongo:7
+    container_name: mongodb-monitoring
+    restart: always
+    env_file:
+      - monitoring_db.env
+    ports:
+      - "27020:27017"
+    volumes:
+      - mongo-monitoring-data:/data/db
+
+  postgres-patient:
+    image: postgres:15
+    container_name: postgres-patient
+    restart: always
+    env_file:
+      - patient_db.env
+    ports:
+      - "5436:5432"
+    volumes:
+      - patient-db-data:/var/lib/postgresql/data
+
+  postgres-test-order:
+    image: postgres:15
+    container_name: postgres-test-order
+    restart: always
+    env_file:
+      - test_order_db.env
+    ports:
+      - "5435:5432"
+    volumes:
+      - test-order-db-data:/var/lib/postgresql/data
+
+
+  redis:
+    image: redis:7.2-alpine
+    container_name: redis
+    ports:
+      - "6379:6379"
+    environment:
+      - REDIS_PASSWORD=
+    volumes:
+      - redis-data:/data
+    healthcheck:
+      test: [ "CMD", "redis-cli", "ping" ]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    restart: always
+
+  redis-insight:
+    image: redis/redisinsight:latest
+    container_name: redis-insight
+    ports:
+      - "5540:5540"
+    depends_on:
+      - redis
+    environment:
+      - RI_HOST=0.0.0.0
+    restart: always
+
+  elasticsearch:
+    image: docker.elastic.co/elasticsearch/elasticsearch:8.16.0
+    container_name: elasticsearch
+    environment:
+      - node.name=es-node-1
+      - cluster.name=lab-es-cluster
+      - discovery.type=single-node
+      - xpack.security.enabled=false
+      - xpack.monitoring.collection.enabled=true
+      - xpack.ml.enabled=false
+      - ES_JAVA_OPTS=-Xms512m -Xmx512m
+    ulimits:
+      memlock:
+        soft: -1
+        hard: -1
+    ports:
+      - "9200:9200"
+      - "9300:9300"
+    volumes:
+      - es_data:/usr/share/elasticsearch/data
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:9200"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+    restart: always
+
+  kibana:
+    image: docker.elastic.co/kibana/kibana:8.15.0
+    container_name: kibana
+    environment:
+      - ELASTICSEARCH_HOSTS=http://elasticsearch:9200
+      - SERVICER_NAME=kibana
+    ports:
+      - "5601:5601"
+    depends_on:
+      elasticsearch:
+        condition: service_healthy
+    restart: always
+
+  prometheus:
+    image: prom/prometheus:latest
+    container_name: prometheus
+    restart: unless-stopped
+    ports:
+      - "9090:9090"
+    volumes:
+      - ./prometheus.yml:/etc/prometheus/prometheus.yml
+      - ./alert_rules.yml:/etc/prometheus/alert_rules.yml
+      - prometheus-data:/prometheus
+    command:
+      - "--config.file=/etc/prometheus/prometheus.yml"
+      - "--storage.tsdb.path=/prometheus"
+      - "--web.enable-lifecycle"
+      - "--web.enable-admin-api"
+      - "--log.level=info"
+    networks:
+      - default
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+
+  grafana:
+    image: grafana/grafana:latest
+    container_name: grafana
+    restart: unless-stopped
+    ports:
+      - "3000:3000"
+    environment:
+      - GF_SECURITY_ADMIN_USER=admin
+      - GF_SECURITY_ADMIN_PASSWORD=admin
+    depends_on:
+      - prometheus
+    volumes:
+      - grafana-data:/var/lib/grafana
+    networks:
+      - default
+
+  elasticsearch-test-order:
+    image: docker.elastic.co/elasticsearch/elasticsearch:8.16.0
+    container_name: elasticsearch-test-order
+    environment:
+      - discovery.type=single-node
+      - ES_JAVA_OPTS=-Xms512m -Xmx512m
+      - xpack.security.enabled=false
+      - xpack.ml.enabled=false
+      - xpack.security.http.ssl.enabled=false
+    ports:
+      - "${ELASTICSEARCH_PORT}:9200"
+    volumes:
+      - elastic-data:/usr/share/elasticsearch/data
+    healthcheck:
+      test: [ "CMD", "curl", "-f", "http://localhost:9200" ]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+  kibana-test-order:
+    image: docker.elastic.co/kibana/kibana:8.15.0
+    container_name: kibana-test-order
+    environment:
+      - ELASTICSEARCH_HOSTS=${ELASTICSEARCH_HOSTS}
+      - SERVICE_NAME=kibana-test-order
+    ports:
+      - "${KIBANA_PORT}:5601"
+    depends_on:
+      elasticsearch-test-order:
+        condition: service_healthy
+    restart: unless-stopped
+
+  config-server:
+    build:
+      context: .
+      dockerfile: config-server/Dockerfile
+    image: khoinguyen2502/config-server:latest
+    container_name: config-server
+    ports:
+      - "8888:8888"
+  eureka-service:
+    build:
+      context: .
+      dockerfile: eureka-service/Dockerfile
+    image: khoinguyen2502/eureka-service:latest
+    container_name: eureka-service
+    ports:
+      - "8761:8761"
+    env_file:
+      - .env
+
+  gateway-service:
+    build:
+      context: .
+      dockerfile: gateway-service/Dockerfile
+    image: khoinguyen2502/gateway-service:latest
+    container_name: gateway-service
+    ports:
+      - "8100:8100"
+    env_file:
+      - .env
+
+  iam-service:
+    build:
+      context: .
+      dockerfile: iam-service/Dockerfile
+    image: khoinguyen2502/iam-service:latest
+    container_name: iam-service
+    env_file:
+      - .env
+      - iam_db.env
+    ports:
+      - "8081:8081"
+    depends_on:
+      - config-server
+
+  instrument-service:
+    build:
+      context: .
+      dockerfile: instrument-service/Dockerfile
+    image: khoinguyen2502/instrument-service:latest
+    container_name: instrument-service
+    env_file:
+      - .env
+      - instrument_db.env
+    ports:
+      - "8084:8084"
+    depends_on:
+      - config-server
+
+  monitoring-service:
+    build:
+      context: .
+      dockerfile: monitoring-service/Dockerfile
+    image: khoinguyen2502/monitoring-service:latest
+    container_name: monitoring-service
+    env_file:
+      - .env
+      - monitoring_db.env
+    ports:
+      - "8086:8086"
+    depends_on:
+      - config-server
+
+
+  patient-service:
+    build:
+      context: .
+      dockerfile: patient-service/Dockerfile
+    image: khoinguyen2502/patient-service:latest
+    container_name: patient-service
+    env_file:
+      - .env
+      - patient_db.env
+    ports:
+      - "8085:8085"
+    depends_on:
+      - config-server
+
+
+  test-order-service:
+    build:
+      context: .
+      dockerfile: test-order-service/Dockerfile
+    image: khoinguyen2502/test-order-service:latest
+    container_name: test-order-service
+    env_file:
+      - .env
+      - test_order_db.env
+    ports:
+      - "8083:8083"
+    depends_on:
+      - config-server
+
+
+  warehouse-service:
+    build:
+      context: .
+      dockerfile: warehouse-service/Dockerfile
+    image: khoinguyen2502/warehouse-service:latest
+    container_name: warehouse-service
+    env_file:
+      - .env
+      - warehouse_db.env
+    ports:
+      - "8082:8082"
+    depends_on:
+      - config-server
+
+volumes:
+  kafka_data:
+  zookeeper_data:
+  instrument-db-data:
+  iam-db-data:
+  patient-db-data:
+  warehouse-db-data:
+  mongo-instrument-data:
+  mongo-monitoring-data:
+  test-order-db-data:
+  redis-data:
+  elastic-data:
+  es_data:
+    driver: local
+  prometheus-data:
+    driver: local
+  grafana-data:
+    driver: local

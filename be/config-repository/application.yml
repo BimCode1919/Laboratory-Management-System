@@ -1,0 +1,39 @@
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info,env,configprops,metrics,prometheus
+
+  endpoint:
+    health:
+      show-details: always
+    prometheus:
+      access: read_only
+    metrics:
+      tags:
+        environment: local
+    security:
+      enabled: false
+
+  spring:
+    security:
+      user:
+        name: ${PROMETHEUS_USER:prometheus}
+        password: ${PROMETHEUS_PASSWORD:prometheus123}
+
+eureka:
+  management:
+    endpoints:
+      web:
+        exposure:
+          include: health, info
+logging:
+  level:
+    root: INFO
+
+
+
+
+
+
+hmac-secret: ${HMAC_SECRET}

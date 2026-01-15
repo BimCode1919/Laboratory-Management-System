@@ -1,0 +1,79 @@
+spring:
+  application:
+    name: monitoring-service
+  profiles:
+    active: ${PROFILES_ACTIVE}
+  config:
+    import: ${CONFIG_SERVER_URL:configserver:http://localhost:8888}
+
+  kafka:
+    bootstrap-servers: ${KAFKA_BOOTSTRAP_SERVERS:localhost:29092}
+
+    producer:
+      key-serializer: org.apache.kafka.common.serialization.StringSerializer
+      value-serializer: org.springframework.kafka.support.serializer.JsonSerializer
+      properties:
+        linger.ms: 10
+        acks: all
+
+    consumer:
+      key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+      value-deserializer: org.springframework.kafka.support.serializer.JsonDeserializer
+      auto-offset-reset: earliest
+      properties:
+        spring.json.trusted.packages: org.overcode250204.*,*
+
+aws:
+  region: ${AWS_REGION}
+  accessKeyId: ${AWS_ACCESS_KEY_ID}
+  secretKey: ${AWS_SECRET_ACCESS_KEY}
+  s3:
+    bucket: ${MONITORING_AWS_S3_BUCKET}
+
+app:
+  monitoring:
+    autoCreateTemplate: false
+    # Bổ sung: Cấu hình cho Worker tự động Health Check
+    healthCheckInterval: 60000 # 60 giây (60000ms)
+
+  kafka:
+    topics:
+      hl7:
+        rawBackup: hl7.raw.backup # Dùng cho HL7BackupListener
+      instrument:
+        monitoring: instrument.monitoring # Dùng cho LogMonitoringListener (nếu không dùng topicPattern)
+
+      monitoring:
+        events: monitoring.events # Dùng cho OutboxPublisher (gửi xác nhận)
+
+
+
+
+swagger:
+  title: "Monitoring Service"
+  version: "1.0"
+  description: "Monitoring Endpoints"
+  package: "monitoringservice"
+  gateway-url: ${GATEWAY_URL}
+springdoc:
+  swagger-ui:
+    disable-swagger-default-url: false
+    path: /swagger-ui.html
+  api-docs:
+    path: /v3/api-docs
+
+
+logging:
+  level:
+    root: INFO
+    org.springframework.data.mongodb.core.MongoTemplate: DEBUG
+    org.overcode250204.monitoringservice: DEBUG
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info,env
+  endpoint:
+    health:
+      show-details: always

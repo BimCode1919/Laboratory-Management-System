@@ -1,0 +1,29 @@
+groups:
+  - name: SpringBoot_Microservices_Alerts
+    rules:
+      - alert: ServiceDown
+        expr: up == 0
+        for: 30s
+        labels:
+          severity: critical
+        annotations:
+          summary: "Service {{ $labels.instance }} is DOWN"
+          description: "The target {{ $labels.job }} ({{ $labels.instance }}) has been unreachable for more than 30s."
+
+      - alert: HighErrorRate
+        expr: sum(rate(http_server_requests_seconds_count{status=~"5.."}[1m])) by (application) > 1
+        for: 1m
+        labels:
+          severity: warning
+        annotations:
+          summary: "High 5xx error rate on {{ $labels.application }}"
+          description: "Application {{ $labels.application }} has error rate > 1 req/s"
+
+      - alert: HighMemoryUsage
+        expr: jvm_memory_used_bytes{area="heap"} / jvm_memory_max_bytes{area="heap"} > 0.9
+        for: 2m
+        labels:
+          severity: warning
+        annotations:
+          summary: "High JVM heap usage on {{ $labels.application }}"
+          description: "Heap usage exceeds 90% in {{ $labels.application }}"

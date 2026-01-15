@@ -1,0 +1,48 @@
+spring:
+  application:
+    name: iam-service
+  profiles:
+    active: ${PROFILES_ACTIVE}
+  config:
+    import: ${CONFIG_SERVER_URL:configserver:http://localhost:8888}
+
+springdoc:
+  api-docs:
+    path: /v3/api-docs
+  swagger-ui:
+    path: /swagger-ui.html
+    disable-swagger-default-url: off
+
+swagger:
+  title: "IAM Service"
+  version: "1.0"
+  description: "IAM Endpoints"
+  package: "iamservice"
+  gateway-url: ${GATEWAY_URL}
+
+aws:
+  region: ${AWS_REGION}
+  credentials:
+    access-key: ${AWS_ACCESS_KEY_ID}
+    secret-key: ${AWS_SECRET_ACCESS_KEY}
+  cognito:
+    userPoolId: ${COGNITO_USERPOOL_ID}
+    clientId: ${COGNITO_CLIENT_ID}
+    clientSecret: ${COGNITO_CLIENT_SECRET}
+
+security:
+  aes:
+    secret-key-base64: ${AES_SECRET_KEY}
+  pepper:
+    base64: ${PEPPER_BASE64}
+
+fetch-privileges-url: ${FETCH_PRIVILEGES_URL}
+
+dynamoDB:
+  table-name: user_privilege_cache
+
+
+one-time-login-redirect-url: ${ONE_TIME_LOGIN_REDIRECT_URL}
+link-verify: ${LINK_VERIFY}
+google-success-callback-url: ${GOOGLE_SUCCESS_CALLBACK_URL}
+google-failed-callback-url: ${GOOGLE_FAILED_CALLBACK_URL}

@@ -1,0 +1,74 @@
+spring:
+  application:
+    name: instrument-service
+  profiles:
+    active: ${PROFILES_ACTIVE}
+  config:
+    import: ${CONFIG_SERVER_URL:configserver:http://localhost:8888}
+
+
+  kafka:
+    bootstrap-servers: ${KAFKA_BOOTSTRAP_SERVERS:localhost:29092}
+
+    producer:
+      key-serializer: org.apache.kafka.common.serialization.StringSerializer
+      value-serializer: org.springframework.kafka.support.serializer.JsonSerializer
+      properties:
+        linger.ms: 10
+        acks: all
+
+    consumer:
+      group-id: instrument-service-monitoring-group
+      key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+      value-deserializer: org.springframework.kafka.support.serializer.JsonDeserializer
+      auto-offset-reset: earliest
+      properties:
+        spring.json.trusted.packages: org.overcode250204.*,*
+
+logging:
+  level:
+    org.springframework.data.mongodb: DEBUG
+    org.springframework.data.jpa: DEBUG
+
+
+reagent:
+  consumption:
+    CBC:
+      DILUENT: 1.5
+      LYSING: 0.1
+      CLEANER: 0.5
+    HBA1C:
+
+      STAINING: 0.2
+      CLEANER: 0.5
+    LFT:
+      DILUENT: 1.0
+      CLOTTING: 0.05
+
+
+
+app:
+  kafka:
+    topics:
+      hl7: hl7.raw.backup
+      testresult: hl7.testresult.publish
+      monitoring: instrument.monitoring
+      configSync: instrument.config.sync
+      analysisRequest: instrument.analysis.request
+      analysisResponse: instrument.analysis.response
+      runCompleted: instrument.run.completed
+      testOrderCreate: testorder.testorder.created
+
+
+swagger:
+  title: "Instrument Service"
+  version: "1.0"
+  description: "Instrument Endpoints"
+  package: "instrumentservice"
+  gateway-url: ${GATEWAY_URL}
+springdoc:
+  swagger-ui:
+    disable-swagger-default-url: false
+    path: /swagger-ui.html
+  api-docs:
+    path: /v3/api-docs

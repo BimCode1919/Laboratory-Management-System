@@ -1,0 +1,11 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: iam-service-svc
+spec:
+  type: ClusterIP
+  selector:
+    app: iam-service
+  ports:
+  - port: 8081
+    targetPort: 8081

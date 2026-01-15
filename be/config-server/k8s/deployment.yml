@@ -1,0 +1,32 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: config-server-deploy
+spec:
+  replicas: 1 
+  selector:
+    matchLabels:
+      app: config-server
+  template:
+    metadata:
+      labels:
+        app: config-server
+    spec:
+      containers:
+      - name: config-server-container
+        image: "540522876009.dkr.ecr.ap-southeast-2.amazonaws.com/lms/config-server"
+        ports:
+        - containerPort: 8888
+        env:
+        - name: SPRING_PROFILES_ACTIVE
+          value: "native"
+        - name: EUREKA_CLIENT_SERVICEURL_DEFAULTZONE
+          value:  "http://eureka-server-svc:8761/eureka/"
+        readinessProbe:
+            httpGet:
+              path: /actuator/health
+              port: 8888
+            initialDelaySeconds: 30
+            periodSeconds: 10
+      imagePullSecrets:
+        - name: ecr-registry-secret

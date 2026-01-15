@@ -1,0 +1,86 @@
+spring:
+  application:
+    name: test-order-service
+  profiles:
+    active: ${PROFILES_ACTIVE}
+  config:
+    import: ${CONFIG_SERVER_URL:configserver:http://localhost:8888}
+
+  kafka:
+    bootstrap-servers: ${KAFKA_BOOTSTRAP_SERVERS:localhost:29092}
+
+    producer:
+      key-serializer: org.apache.kafka.common.serialization.StringSerializer
+      value-serializer: org.springframework.kafka.support.serializer.JsonSerializer
+    consumer:
+      group-id: test-order-service-group
+      key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+      value-deserializer: org.springframework.kafka.support.serializer.JsonDeserializer
+      auto-offset-reset: earliest
+      properties:
+        spring.json.trusted.packages: "*"
+  elasticsearch:
+    uris: ${ELASTICSEARCH_URI}
+    connection-timeout: 10s
+    socket-timeout: 60s
+    username: ${ELASTIC_USERNAME}
+    password: ${ELASTIC_PASSWORD}
+
+gemini:
+  model: gemini-2.5-flash
+
+
+app:
+  reindex:
+    batch-size: 2000       # số record mỗi bulk request
+    enabled: true
+    cron: "0 0 2 * * * *"    # chạy 2h sáng mỗi ngày
+  kafka:
+    topics:
+      test-order:
+        create: testorder.created
+      hl7:
+        testResult: hl7.testresult.publish
+        rawBackup: hl7.raw.backup
+      instrument:
+        analysisResponse: instrument.analysis.response
+        runCompleted: instrument.run.completed
+      monitoring:
+        logs: testorder.monitoring
+      patient:
+        patientUpdate: patient.patient.updated
+
+prefix-record-code: ${PREFIX_ORDER_CODE}
+
+
+swagger:
+  title: "Test Order Service"
+  version: "1.0"
+  description: "Test Order Endpoints"
+  package: "testorderservice"
+  gateway-url: ${GATEWAY_URL}
+springdoc:
+  swagger-ui:
+    disable-swagger-default-url: true
+    urls:
+      - url: /v3/api-docs
+        name: ${spring.application.name}
+    path: /swagger-ui.html
+  api-docs:
+    path: /v3/api-docs
+
+
+aws:
+  region: ap-southeast-2
+  accessKey: ${TEST_ORDER_SERVICE_S3_ACCESS_KEY}
+  secretKey: ${TEST_ORDER_SERVICE_S3_SECRET_KEY}
+  roleArn: ${TEST_ORDER_SERVICE_S3_ROLE_ARN}
+  bucketName: ${TEST_ORDER_SERVICE_S3_BUCKET_NAME}
+
+paypal:
+  client-id: ${PAYPAL_CLIENT_ID}
+  client-secret: ${PAYPAL_CLIENT_SECRET}
+  mode: ${PAYPAL_MODE}
+  return-url: ${PAYPAL_REDIRECT_SUCCESS}
+  cancel-url: ${PAYPAL_REDIRECT_CANCEL}
+  rate-vnd-usd: ${RATE_VND_USD}

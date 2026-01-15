@@ -1,0 +1,30 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: eureka-server-deploy
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: eureka-server
+  template:
+    metadata:
+      labels:
+        app: eureka-server
+    spec:
+      containers:
+      - name: eureka-server-container
+        image: "540522876009.dkr.ecr.ap-southeast-2.amazonaws.com/lms/eureka-service" 
+        ports:
+        - containerPort: 8761
+        env:
+        - name: SPRING_CLOUD_CONFIG_URI
+          value: "http://config-server-svc:8888"
+        readinessProbe:
+          httpGet:
+            path: /actuator/health
+            port: 8761
+          initialDelaySeconds: 45
+          periodSeconds: 10
+      imagePullSecrets:
+        - name: ecr-registry-secret

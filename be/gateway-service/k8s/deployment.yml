@@ -1,0 +1,32 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: gateway-service-deploy
+spec:
+  replicas: 2 # Chạy 2 gateway để HA
+  selector:
+    matchLabels:
+      app: gateway-service
+  template:
+    metadata:
+      labels:
+        app: gateway-service
+    spec:
+      containers:
+      - name: gateway-container
+        image: "540522876009.dkr.ecr.ap-southeast-2.amazonaws.com/lms/gateway-service"
+        ports:
+        - containerPort: 8100 
+        env:
+        - name: SPRING_CLOUD_CONFIG_URI
+          value: "http://config-server-svc:8888"
+        - name: EUREKA_CLIENT_SERVICEURL_DEFAULTZONE
+          value:  "http://eureka-server-svc:8761/eureka/"
+        readinessProbe:
+          httpGet:
+            path: /actuator/health
+            port: 8100
+          initialDelaySeconds: 45
+          periodSeconds: 10
+      imagePullSecrets:
+        - name: ecr-registry-secret

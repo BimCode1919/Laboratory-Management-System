@@ -1,0 +1,2 @@
+server:
+  port: ${EUREKA_SERVICE_PORT}

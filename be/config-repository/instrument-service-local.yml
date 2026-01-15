@@ -1,0 +1,61 @@
+server:
+  port: ${INSTRUMENT_SERVICE_PORT}
+
+eureka:
+  instance:
+    hostname: ${INSTANCE_HOST}
+    prefer-ip-address: ${PREFER_IP_ADDRESS}
+  client:
+    register-with-eureka: true
+    fetch-registry: true
+    service-url:
+      defaultZone: ${EUREKA_CLIENT_SERVICE_URL_DEFAULT_ZONE}
+
+spring:
+  datasource:
+    url: ${INSTRUMENT_SERVICE_DATABASE_URL}
+    username: ${INSTRUMENT_SERVICE_USERNAME}
+    password: ${INSTRUMENT_SERVICE_PASSWORD}
+    driver-class-name: ${POSTGRESQL_DRIVER}
+
+  data:
+    mongodb:
+      uri: ${MONGO_URI}
+
+  jpa:
+    hibernate:
+      ddl-auto: ${SPRING_JPA_HIBERNATE_DDL_AUTO}
+    show-sql: ${SPRING_JPA_SHOW_SQL}
+    properties:
+      hibernate:
+        dialect: ${DIALECT_POSTGRESQL}
+        format_sql: true
+
+  application:
+    name: instrument-service
+
+grpc:
+  server:
+    port: 9091
+    in-process-name: instrument-service
+    security:
+      enabled: false
+  client:
+    iam-service:
+      address: ${GRPC_IAM_SERVER_CALL}
+      negotiationType: plaintext
+    warehouse-service:
+      address: ${GRPC_WAREHOUSE_SERVER_CALL}
+      negotiationType: plaintext
+
+
+logging:
+  level:
+    org.springframework.data.mongodb: DEBUG
+    org.springframework.data.jpa: DEBUG
+
+management:
+  metrics:
+    tags:
+      environment: local
+      application: instrument-service

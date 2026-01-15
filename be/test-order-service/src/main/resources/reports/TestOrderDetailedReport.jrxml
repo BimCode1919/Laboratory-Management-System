@@ -1,0 +1,206 @@
+<!-- Created with Jaspersoft Studio version 7.0.3.final using JasperReports Library version 7.0.3-41034ca841d452f3305ba55b9042260aaa1ab5dd  -->
+<jasperReport name="TestOrderDetailedReport" language="java" columnCount="1" pageWidth="595" pageHeight="842" orientation="Landscape" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="e3ae5d32-3dd3-4b2f-9407-1b1ec4274361">
+	<property name="com.jaspersoft.studio.unit." value="pixel"/>
+	<property name="com.jaspersoft.studio.unit.pageHeight" value="pixel"/>
+	<property name="com.jaspersoft.studio.unit.pageWidth" value="pixel"/>
+	<property name="com.jaspersoft.studio.unit.topMargin" value="pixel"/>
+	<property name="com.jaspersoft.studio.unit.bottomMargin" value="pixel"/>
+	<property name="com.jaspersoft.studio.unit.leftMargin" value="pixel"/>
+	<property name="com.jaspersoft.studio.unit.rightMargin" value="pixel"/>
+	<property name="com.jaspersoft.studio.unit.columnWidth" value="pixel"/>
+	<property name="com.jaspersoft.studio.unit.columnSpacing" value="pixel"/>
+	<style name="TitleStyle" forecolor="#222222" hTextAlign="Center" vTextAlign="Middle" pattern="" fontName="Calibri" fontSize="18.0" bold="true"/>
+	<style name="SubtitleStyle" forecolor="#555555" hTextAlign="Center" fontName="Calibri" fontSize="11.0" italic="true"/>
+	<style name="LabelStyle" forecolor="#333333" fontName="Calibri" fontSize="10.0" bold="true"/>
+	<style name="ValueStyle" forecolor="#000000" fontName="Calibri" fontSize="10.0"/>
+	<style name="TableHeader" mode="Opaque" forecolor="#FFFFFF" backcolor="#4A90E2" hTextAlign="Center" vTextAlign="Middle" fontName="Calibri" fontSize="11.0" bold="true">
+		<box>
+			<pen lineWidth="0.5" lineColor="#CCCCCC"/>
+		</box>
+	</style>
+	<style name="TableCell" mode="Opaque" backcolor="#FFFFFF" hTextAlign="Left" vTextAlign="Middle" fontName="Calibri" fontSize="10.0">
+		<box>
+			<pen lineWidth="0.5" lineColor="#DDDDDD"/>
+		</box>
+	</style>
+	<style name="TableCellAlt" style="TableCell" backcolor="#F9FBFF"/>
+	<parameter name="orderCode" class="java.lang.String"/>
+	<parameter name="patientName" class="java.lang.String"/>
+	<parameter name="gender" class="java.lang.String"/>
+	<parameter name="dateOfBirth" class="java.util.Date"/>
+	<parameter name="phoneNumber" class="java.lang.String"/>
+	<parameter name="status" class="java.lang.String"/>
+	<parameter name="createdBy" class="java.lang.String"/>
+	<parameter name="createdOn" class="java.util.Date"/>
+	<parameter name="runOn" class="java.util.Date"/>
+	<parameter name="notes" class="java.lang.String"/>
+	<field name="parameterName" class="java.lang.String"/>
+	<field name="resultValue" class="java.lang.Double"/>
+	<field name="unit" class="java.lang.String"/>
+	<field name="referenceLow" class="java.lang.String"/>
+	<field name="referenceHigh" class="java.lang.String"/>
+	<field name="alertLevel" class="java.lang.String"/>
+	<field name="aiReviewComment" class="java.lang.String"/>
+	<title height="90">
+		<element kind="staticText" uuid="608da498-3554-44a3-98d7-423c88dfab2a" x="0" y="-10" width="555" height="30" forecolor="#2D13AD" backcolor="#1414BA" fontName="DejaVu Sans" fontSize="24.0" style="TitleStyle">
+			<text><![CDATA[HemaLabManager]]></text>
+		</element>
+		<element kind="staticText" uuid="40092333-a74d-495d-8b6f-4b3ed395fb6a" x="0" y="18" width="555" height="15" fontName="DejaVu Sans" bold="true" style="SubtitleStyle">
+			<text><![CDATA[Blood Test Results]]></text>
+		</element>
+		<element kind="frame" uuid="925b72a4-9cd1-46a3-b29a-374cff4449e0" mode="Opaque" x="0" y="45" width="555" height="40" forecolor="#030303" backcolor="#FFFFFF">
+			<element kind="staticText" uuid="843ef136-e900-4912-b080-0835b733269e" x="12" y="8" width="65" height="14" fontName="DejaVu Sans" fontSize="10.0" style="LabelStyle">
+				<text><![CDATA[Order Code:]]></text>
+				<property name="com.jaspersoft.studio.unit.y" value="px"/>
+			</element>
+			<element kind="textField" uuid="a4a9a922-62f1-457c-8665-0c81f73efcdc" x="81" y="8" width="161" height="14" fontName="DejaVu Sans" style="ValueStyle">
+				<expression><![CDATA[$P{orderCode}]]></expression>
+				<property name="com.jaspersoft.studio.unit.y" value="px"/>
+			</element>
+			<element kind="staticText" uuid="0e5f8c62-5c93-42ef-a12c-d46ac9b59178" x="12" y="23" width="65" height="14" fontName="DejaVu Sans" style="LabelStyle">
+				<text><![CDATA[Patient:]]></text>
+				<property name="com.jaspersoft.studio.unit.y" value="px"/>
+			</element>
+			<element kind="textField" uuid="76a84be4-e407-4444-8837-bf885e2e0480" positionType="FixRelativeToBottom" x="81" y="23" width="161" height="14" fontName="DejaVu Sans" style="ValueStyle">
+				<expression><![CDATA[$P{patientName}]]></expression>
+			</element>
+			<element kind="staticText" uuid="0d4a4b38-afec-453d-894f-43982368ba8e" x="253" y="23" width="60" height="14" fontName="DejaVu Sans" style="LabelStyle">
+				<text><![CDATA[Gender:]]></text>
+				<property name="com.jaspersoft.studio.unit.y" value="px"/>
+			</element>
+			<element kind="textField" uuid="93712c7b-1458-480a-808e-67d4159815f8" x="319" y="23" width="80" height="14" fontName="DejaVu Sans" style="ValueStyle">
+				<expression><![CDATA[$P{gender}]]></expression>
+				<property name="com.jaspersoft.studio.unit.y" value="px"/>
+			</element>
+			<element kind="staticText" uuid="4b5aa927-bf8c-41e8-9c88-3b32172336ec" x="416" y="8" width="45" height="14" fontName="DejaVu Sans" style="LabelStyle">
+				<text><![CDATA[DOB:]]></text>
+				<property name="com.jaspersoft.studio.unit.y" value="px"/>
+			</element>
+			<element kind="textField" uuid="673be04f-cbf0-4d63-b285-33e2a8324e46" x="461" y="8" width="74" height="14" fontName="DejaVu Sans" pattern="yyyy-MM-dd" style="ValueStyle">
+				<expression><![CDATA[$P{dateOfBirth}]]></expression>
+				<property name="com.jaspersoft.studio.unit.y" value="px"/>
+			</element>
+			<element kind="textField" uuid="7b5512d3-3dbd-49c4-bbf7-a408f02e4412" x="320" y="8" width="80" height="14" fontName="DejaVu Sans" style="ValueStyle">
+				<expression><![CDATA[$P{phoneNumber}]]></expression>
+				<property name="com.jaspersoft.studio.unit.y" value="px"/>
+			</element>
+			<element kind="staticText" uuid="4b38478f-8b90-40b0-8e5f-9ef29d307449" x="252" y="8" width="61" height="14" fontName="DejaVu Sans" style="LabelStyle">
+				<text><![CDATA[Phone Number:]]></text>
+				<property name="com.jaspersoft.studio.unit.y" value="px"/>
+			</element>
+			<box>
+				<pen lineWidth="0.5" lineColor="#CCCCCC"/>
+			</box>
+		</element>
+	</title>
+	<columnHeader height="24">
+		<element kind="staticText" uuid="33ea8711-435a-42e9-9f5d-fba73f981402" x="0" y="0" width="170" height="24" fontName="DejaVu Sans" fontSize="10.0" hTextAlign="Center" style="TableHeader">
+			<text><![CDATA[Parameter]]></text>
+			<box style="TableHeader">
+				<pen lineWidth="1.0" lineStyle="Solid" lineColor="#1F1F1F"/>
+			</box>
+		</element>
+		<element kind="staticText" uuid="bd2c5684-e790-4e01-9cb6-248234697646" x="170" y="0" width="80" height="24" fontName="DejaVu Sans" fontSize="10.0" hTextAlign="Center" style="TableHeader">
+			<text><![CDATA[Result]]></text>
+			<box style="TableHeader">
+				<pen lineWidth="1.0" lineStyle="Solid" lineColor="#1F1F1F"/>
+			</box>
+		</element>
+		<element kind="staticText" uuid="9f2b122b-39d7-466b-8551-362606302292" x="250" y="0" width="60" height="24" fontName="DejaVu Sans" fontSize="10.0" hTextAlign="Center" style="TableHeader">
+			<text><![CDATA[Unit]]></text>
+			<box style="TableHeader">
+				<pen lineWidth="1.0" lineStyle="Solid" lineColor="#1F1F1F"/>
+			</box>
+		</element>
+		<element kind="staticText" uuid="f6168012-a902-4ab5-bdd0-fd6e2629e5dd" x="310" y="0" width="85" height="24" fontName="DejaVu Sans" fontSize="10.0" hTextAlign="Center" style="TableHeader">
+			<text><![CDATA[Ref. Low]]></text>
+			<box style="TableHeader">
+				<pen lineWidth="1.0" lineStyle="Solid" lineColor="#1F1F1F"/>
+			</box>
+		</element>
+		<element kind="staticText" uuid="43d2ed19-cb17-4f5f-888f-52c6d2223063" x="395" y="0" width="85" height="24" fontName="DejaVu Sans" fontSize="10.0" hTextAlign="Center" style="TableHeader">
+			<text><![CDATA[Ref. High]]></text>
+			<box style="TableHeader">
+				<pen lineWidth="1.0" lineStyle="Solid" lineColor="#1F1F1F"/>
+			</box>
+		</element>
+		<element kind="staticText" uuid="17a78bdc-a7f6-4443-9b7c-163761df9b80" x="480" y="0" width="74" height="24" backcolor="#4A90E2" fontName="DejaVu Sans" fontSize="10.0" hTextAlign="Center" style="TableHeader">
+			<text><![CDATA[Alert]]></text>
+			<box style="TableHeader">
+				<pen lineWidth="1.0" lineStyle="Solid" lineColor="#1F1F1F"/>
+			</box>
+		</element>
+	</columnHeader>
+	<detail>
+		<band height="20">
+			<element kind="textField" uuid="17a98659-7d33-453a-81c4-cdfa5976495f" x="0" y="0" width="170" height="20" fontName="DejaVu Sans" fontSize="8.0" hTextAlign="Center" style="TableCell">
+				<expression><![CDATA[$F{parameterName}]]></expression>
+				<box style="TableCell">
+					<pen lineWidth="1.0" lineStyle="Solid" lineColor="#1F1F1F"/>
+				</box>
+			</element>
+			<element kind="textField" uuid="15768133-53fa-47eb-9564-792c8bbba37a" x="170" y="0" width="80" height="20" fontName="DejaVu Sans" fontSize="8.0" hTextAlign="Center" style="TableCell">
+				<expression><![CDATA[$F{resultValue}]]></expression>
+				<box style="TableCell">
+					<pen lineWidth="1.0" lineStyle="Solid" lineColor="#1F1F1F"/>
+				</box>
+			</element>
+			<element kind="textField" uuid="b8fd961b-d127-45e4-bae6-6264e23adde3" x="250" y="0" width="60" height="20" fontName="DejaVu Sans" fontSize="8.0" hTextAlign="Center" style="TableCell">
+				<expression><![CDATA[$F{unit}]]></expression>
+				<box style="TableCell">
+					<pen lineWidth="1.0" lineStyle="Solid" lineColor="#1F1F1F"/>
+				</box>
+			</element>
+			<element kind="textField" uuid="ac08c8f2-52ec-4685-a8dc-85e7030c1fda" x="310" y="0" width="85" height="20" fontName="DejaVu Sans" fontSize="8.0" hTextAlign="Center" style="TableCell">
+				<expression><![CDATA[$F{referenceLow}]]></expression>
+				<box style="TableCell">
+					<pen lineWidth="1.0" lineStyle="Solid" lineColor="#1F1F1F"/>
+				</box>
+			</element>
+			<element kind="textField" uuid="815f15cd-7ac4-455a-a0b7-cf2c55cb3494" x="395" y="0" width="85" height="20" fontName="DejaVu Sans" fontSize="8.0" hTextAlign="Center" style="TableCell">
+				<expression><![CDATA[$F{referenceHigh}]]></expression>
+				<box style="TableCell">
+					<pen lineWidth="1.0" lineStyle="Solid" lineColor="#1F1F1F"/>
+				</box>
+			</element>
+			<element kind="textField" uuid="79617f93-8fd4-45f0-849a-ebb8a8b4fc44" x="480" y="0" width="74" height="20" fontName="DejaVu Sans" fontSize="8.0" hTextAlign="Center" style="TableCell">
+				<expression><![CDATA[$F{alertLevel}]]></expression>
+				<box style="TableCell">
+					<pen lineWidth="1.0" lineStyle="Solid" lineColor="#1F1F1F"/>
+				</box>
+			</element>
+		</band>
+		<band height="40" splitType="Stretch">
+			<printWhenExpression><![CDATA[$F{aiReviewComment} != null && !$F{aiReviewComment}.isEmpty()]]></printWhenExpression>
+			<element kind="line" uuid="8af4b930-90ea-4c39-97fe-4c332118eba9" x="0" y="0" width="555" height="1" forecolor="#999999"/>
+			<element kind="staticText" uuid="77e9dabd-a09c-4469-9422-94e350f91548" x="0" y="5" width="60" height="12" forecolor="#666666" fontName="DejaVu Sans" fontSize="8.0" bold="true">
+				<text><![CDATA[AI Review:]]></text>
+			</element>
+			<element kind="textField" uuid="02ee6677-dbbf-436e-8fd9-8f5f58430280" x="65" y="5" width="490" height="35" forecolor="#444444" fontName="DejaVu Sans" fontSize="9.0" blankWhenNull="true" italic="true">
+				<expression><![CDATA[$F{aiReviewComment}]]></expression>
+			</element>
+		</band>
+	</detail>
+	<pageFooter height="54">
+		<element kind="textField" uuid="d6b12d35-6144-44ee-8aab-d7fc073055e3" x="410" y="21" width="150" height="20" fontName="DejaVu Sans" hTextAlign="Center">
+			<expression><![CDATA["Page " + $V{PAGE_NUMBER}]]></expression>
+			<property name="com.jaspersoft.studio.unit.width" value="px"/>
+		</element>
+		<element kind="staticText" uuid="d2cbf3e7-b4a3-4cc9-858e-479a3ff8954f" x="10" y="20" width="67" height="20" fontName="DejaVu Sans">
+			<text><![CDATA[Created On:]]></text>
+			<property name="com.jaspersoft.studio.unit.height" value="px"/>
+		</element>
+		<element kind="textField" uuid="3f4232d5-c8f6-488e-8a47-bc4c5c8053d8" x="81" y="20" width="100" height="20" fontName="DejaVu Sans">
+			<expression><![CDATA[$P{createdOn}]]></expression>
+			<property name="com.jaspersoft.studio.unit.height" value="px"/>
+		</element>
+	</pageFooter>
+	<summary height="120">
+		<element kind="staticText" uuid="ffe67d68-6ef6-49ec-a3f2-0f91127b52e0" x="0" y="30" width="555" height="20" fontName="DejaVu Sans" fontSize="15.0" style="LabelStyle">
+			<text><![CDATA[Clinical Notes]]></text>
+		</element>
+		<element kind="textField" uuid="54b537ea-7853-49e3-9bd9-7daf07ed57d7" x="0" y="60" width="555" height="20" fontName="DejaVu Sans" style="ValueStyle">
+			<expression><![CDATA[$P{notes}]]></expression>
+		</element>
+	</summary>
+</jasperReport>

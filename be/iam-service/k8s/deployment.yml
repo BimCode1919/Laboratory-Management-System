@@ -1,0 +1,45 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: iam-service-deploy
+  labels: iam-service
+spec:
+  replicas: 3
+  strategy:
+    type: RollingUpdate #Update, no downtime
+    rollingUpdate:
+      maxUnavailable: 1
+      maxSurge: 1
+
+  selector:
+    matchLabels:
+      app: iam-service
+    template:
+      metadata:
+        labels:
+          app: iam-service
+      spec:
+        containers:
+        - name: iam-container
+          image: "540522876009.dkr.ecr.ap-southeast-2.amazonaws.com/lms/iam-service" 
+          ports:
+          - containerPort: 8081
+          env:
+          - name: SPRING_CLOUD_CONFIG_URI
+            value: "http://config-server-svc:8888"
+          - name: EUREKA_CLIENT_SERVICEURL_DEFAULTZONE
+            value:  "http://eureka-server-svc:8761/eureka/"
+          readinessProbe:
+            httpGet:
+              path: /actuator/health
+              port: 8081
+            initialDelaySeconds: 30
+            periodSeconds: 10
+          livenessProbe:
+            httpGet:
+              path: /actuator/health
+              port: 8081
+            initialDelaySeconds: 45
+            periodSeconds: 20
+        imagePullSecrets:
+          - name: ecr-registry-secret

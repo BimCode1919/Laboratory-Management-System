@@ -1,0 +1,60 @@
+server:
+  port: ${GATEWAY-SERVICE-PORT}
+
+spring:
+  cloud:
+    gateway:
+      server:
+        webflux:
+          routes:
+            - id: iam-service
+              uri: lb://iam-service
+              predicates:
+                - Path=/iam-service/**
+              filters:
+                - StripPrefix=1
+            - id: instrument-service
+              uri: lb://instrument-service
+              predicates:
+                - Path=/instrument-service/**
+              filters:
+                - StripPrefix=1
+            - id: monitoring-service
+              uri: lb://monitoring-service
+              predicates:
+                - Path=/monitoring-service/**
+              filters:
+                - StripPrefix=1
+            - id: patient-service
+              uri: lb://patient-service
+              predicates:
+                - Path=/patient-service/**
+              filters:
+                - StripPrefix=1
+            - id: test-order-service
+              uri: lb://test-order-service
+              predicates:
+                - Path=/test-order-service/**
+              filters:
+                - StripPrefix=1
+            - id: warehouse-service
+              uri: lb://warehouse-service
+              predicates:
+                - Path=/warehouse-service/**
+              filters:
+                - StripPrefix=1
+
+          discovery:
+            locator:
+              enabled: true
+              lower-case-service-id: true
+
+eureka:
+  client:
+    register-with-eureka: true
+    fetch-registry: true
+    service-url:
+      defaultZone: ${EUREKA_CLIENT_SERVICE_URL_DEFAULT_ZONE}
+  instance:
+    hostname: ${INSTANCE_HOST}
+    prefer-ip-address: ${PREFER_IP_ADDRESS}

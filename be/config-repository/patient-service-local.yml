@@ -1,0 +1,60 @@
+server:
+  port: ${PATIENT_SERVICE_PORT}
+
+eureka:
+  instance:
+    hostname: ${INSTANCE_HOST}
+    prefer-ip-address: ${PREFER_IP_ADDRESS}
+  client:
+    register-with-eureka: true
+    fetch-registry: true
+    service-url:
+      defaultZone: ${EUREKA_CLIENT_SERVICE_URL_DEFAULT_ZONE}
+
+spring:
+  datasource:
+    url: ${PATIENT_SERVICE_DATABASE_URL}
+    username: ${PATIENT_SERVICE_USERNAME}
+    password: ${PATIENT_SERVICE_PASSWORD}
+  jpa:
+    database-platform: org.hibernate.dialect.PostgreSQLDialect
+    hibernate:
+      dialect: ${DIALECT_POSTGRESQL}
+      ddl-auto: ${SPRING_JPA_HIBERNATE_DDL_AUTO}
+    show-sql: ${SPRING_JPA_SHOW_SQL}
+
+  elasticsearch:
+    uris: ${SPRING_ELASTICSEARCH_PORT}
+    connection-timeout: 5s
+    socket-timeout: 30s
+  data:
+    elasticsearch:
+      repositories:
+        enabled: true
+      auto-index-creation: false
+  logging:
+    level:
+      org.springframework.data.elasticsearch: INFO
+      co.elastic.client.transport.rest_client: WARN
+
+grpc:
+  server:
+    port: 6668
+    in-process-name: patient-service
+    security:
+      enabled: false
+    negotiation-type: plaintext
+  client:
+    iam-service:
+      address: ${GRPC_IAM_SERVER_CALL}
+      negotiationType: plaintext
+    test-order-service:
+      address: ${GRPC_TEST_ORDER_SERVER_CALL}
+      negotiationType: plaintext
+
+
+management:
+  metrics:
+    tags:
+      environment: local
+      application: patient-service

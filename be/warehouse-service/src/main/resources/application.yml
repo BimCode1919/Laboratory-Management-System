@@ -1,0 +1,58 @@
+spring:
+  application:
+    name: warehouse-service
+  profiles:
+    active: ${PROFILES_ACTIVE}
+  config:
+    import: ${CONFIG_SERVER_URL:configserver:http://localhost:8888}
+
+  kafka:
+    bootstrap-servers: ${KAFKA_BOOTSTRAP_SERVERS:localhost:29092}
+    producer:
+      key-serializer: org.apache.kafka.common.serialization.StringSerializer
+      value-serializer: org.springframework.kafka.support.serializer.JsonSerializer
+      properties:
+        linger.ms: 10
+        acks: all
+
+    consumer:
+      #      group-id: ${KAFKA_CONSUMER_GROUP:warehouse-service-reagent}
+      key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+      value-deserializer: org.springframework.kafka.support.serializer.JsonDeserializer
+      auto-offset-reset: earliest
+      properties:
+        spring.json.trusted.packages: org.overcode250204.*,*
+
+app:
+  kafka:
+    topics:
+      monitoring: warehouse.monitoring
+      instrument: warehouse.instrument.events
+      reagent: warehouse.reagent.events
+      configuration: warehouse.configuration.events
+
+
+
+
+
+swagger:
+  title: "Warehouse Service"
+  version: "1.0"
+  description: "Warehouse Endpoints"
+  package: "warehouseservice"
+  gateway-url: ${GATEWAY_URL}
+springdoc:
+  swagger-ui:
+    disable-swagger-default-url: true
+    path: /swagger-ui.html
+  api-docs:
+    path: /v3/api-docs
+
+# Logging level for Kafka clients (optional)
+logging:
+  level:
+    root: INFO
+    org.springframework: INFO
+    org.hibernate.SQL: DEBUG
+    org.apache.kafka: INFO
+

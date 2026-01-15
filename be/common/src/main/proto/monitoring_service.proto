@@ -1,0 +1,21 @@
+syntax = "proto3";
+
+package monitoring;
+
+option java_package = "org.overcode250204.common.grpc";
+option java_multiple_files = true;
+
+
+service MonitoringService {
+  rpc RequestSyncUp(MonitoringSyncUpRequest) returns (MonitoringSyncUpResponse);
+}
+
+message MonitoringSyncUpRequest {
+  string source_service = 1;
+  repeated string barcodes = 2;
+}
+
+message MonitoringSyncUpResponse {
+  bool success = 1;
+  string message = 2;
+}

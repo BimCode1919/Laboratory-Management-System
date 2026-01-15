@@ -1,0 +1,58 @@
+#stages:
+#  - build-common
+#  - build
+#  - test
+#
+#variables:
+#  MAVEN_OPTS: "-Dmaven.repo.local=.m2/repository"
+#  JAVA_HOME: "/usr/lib/jvm/java-21-openjdk-amd64"
+#
+#cache:
+#  key: maven-cache
+#  paths:
+#    - .m2/repository
+#
+#before_script:
+#  - apt-get update -qq
+#  - apt-get install -y openjdk-21-jdk maven
+#  - java -version
+#  - mvn -v
+#
+#build-common:
+#  stage: build-common
+#  script:
+#    - echo "Building common modules..."
+#    - mvn -f common/pom.xml clean install -DskipTests
+#    - mvn -f common-config/pom.xml clean install -DskipTests
+#  artifacts:
+#    paths:
+#      - .m2/repository
+#    expire_in: 1h
+#
+#build:
+#  stage: build
+#  needs:
+#    - build-common
+#  parallel:
+#    matrix:
+#      - SERVICE: ["config-server", "test-order-service", "gateway-service", "iam-service", "warehouse-service"]
+#  script:
+#    - echo "Building $SERVICE..."
+#    - cd $SERVICE
+#    - mvn clean package -DskipTests
+#  artifacts:
+#    paths:
+#      - .m2/repository
+#    expire_in: 1h
+#
+#test:
+#  stage: test
+#  needs:
+#    - build
+#  parallel:
+#    matrix:
+#      - SERVICE: ["config-server", "test-order-service", "gateway-service", "iam-service", "warehouse-service"]
+#  script:
+#    - echo "Running test for $SERVICE..."
+#    - cd $SERVICE
+#    - mvn clean install -DskipTests

@@ -1,0 +1,94 @@
+server:
+  port: ${IAM_SERVICE_PORT}
+
+eureka:
+  instance:
+    hostname: ${INSTANCE_HOST}
+    prefer-ip-address: ${PREFER_IP_ADDRESS}
+  client:
+    register-with-eureka: true
+    fetch-registry: true
+    service-url:
+      defaultZone: ${EUREKA_CLIENT_SERVICE_URL_DEFAULT_ZONE}
+
+spring:
+  datasource:
+    url: ${IAM_SERVICE_DATABASE_URL}
+    username: ${IAM_SERVICE_USERNAME}
+    password: ${IAM_SERVICE_PASSWORD}
+  jpa:
+    database-platform: org.hibernate.dialect.PostgreSQLDialect
+    hibernate:
+      dialect: ${DIALECT_POSTGRESQL}
+      ddl-auto: ${SPRING_JPA_HIBERNATE_DDL_AUTO}
+    show-sql: ${SPRING_JPA_SHOW_SQL}
+  data:
+    redis:
+      host: ${REDIS_HOST}
+      port: ${REDIS_PORT}
+      password: ${REDIS_PASSWORD}
+      timeout: ${REDIS_TIMEOUT}
+  cache:
+    type: ${CACHE_TYPE}
+    redis:
+      time-to-live: ${REDIS_TIME_TO_LIVE}
+  kafka:
+    bootstrap-servers: ${KAFKA_BOOTSTRAP_SERVERS:localhost:29092}
+    consumer:
+      group-id: patient-service-group
+      key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+      value-deserializer: org.springframework.kafka.support.serializer.JsonDeserializer
+      auto-offset-reset: earliest
+      properties:
+        spring.json.trusted.packages: "*"
+    producer:
+      key-serializer: org.apache.kafka.common.serialization.StringSerializer
+      value-serializer: org.springframework.kafka.support.serializer.JsonSerializer
+  mail:
+    host: ${MAIL_HOST}
+    port: ${MAIL_PORT}
+    username: ${MAIL_USERNAME}
+    password: ${MAIL_PASSWORD}
+    properties:
+      mail:
+        smtp:
+          auth: true
+          starttls:
+            enable: true
+
+app:
+  redis:
+    token:
+      prefix: ${REDIS_TOKEN_PREFIX}
+      ttl: ${REDIS_TOKEN_TTL}
+
+
+grpc:
+  server:
+    port: 6666
+    in-process-name: iam-service
+    security:
+      enabled: false
+    negotiation-type: plaintext
+
+    management:
+      metrics:
+        tags:
+          environment: local
+          application: iam-service
+
+management:
+  metrics:
+    tags:
+      environment: local
+      application: iam-service
+
+
+google:
+  client:
+    id: ${GOOGLE_CLIENT_ID}
+    secret: ${GOOGLE_CLIENT_SECRET}
+  redirect:
+    uri: ${GOOGLE_REDIRECT_URI}
+  token:
+    uri: ${GOOGLE_TOKEN_URI}

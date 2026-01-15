@@ -1,0 +1,31 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Transform: AWS::Serverless-2016-10-31
+Description: Pre Token Generation Lambda for Cognito
+
+Globals:
+  Function:
+    Timeout: 10
+    MemorySize: 512
+    Runtime: java21
+    Architectures: [x86_64]
+    Environment:
+      Variables:
+        IAM_URL_TEMPLATE: "http://localhost:8100/iam-service/users/{username}/privileges"
+        CACHE_TABLE: "UserPrivilegeCache"
+
+Resources:
+  PreTokenLambda:
+    Type: AWS::Serverless::Function
+    Properties:
+      FunctionName: CognitoPreTokenHandler
+      Handler: org.overcode250204.handler.PreTokenHandler::handleRequest
+      CodeUri: ./target/iam-service-1.0.0-shaded.jar
+      Policies:
+        - DynamoDBCrudPolicy:
+            TableName: UserPrivilegeCache
+
+
+Outputs:
+  LambdaArn:
+    Description: ARN of PreToken Lambda
+    Value: !GetAtt PreTokenLambda.Arn

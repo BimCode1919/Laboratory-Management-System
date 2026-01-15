@@ -1,0 +1,74 @@
+{
+  "settings": {
+    "analysis": {
+      "analyzer": {
+        "vn_analyzer": {
+          "tokenizer": "standard",
+          "filter": ["lowercase", "asciifolding"]
+        }
+      }
+    }
+  },
+  "mappings": {
+    "properties": {
+      "id": { "type": "keyword" },
+      "patientId": { "type": "keyword" },
+      "patientCode": { "type": "keyword" },
+      "fullName": {
+        "type": "text",
+        "fields": {
+          "keyword": { "type": "keyword" }
+        }
+      },
+      "dateOfBirth": { "type": "date" },
+      "gender": { "type": "keyword" },
+      "phone": { "type": "keyword" },
+      "email": { "type": "keyword" },
+      "address": { "type": "text", "analyzer": "vn_analyzer" },
+      "lastTestDate": { "type": "date" },
+      "status": { "type": "keyword" },
+      "testRecords": {
+        "type": "nested",
+        "properties": {
+          "testOrderId": { "type": "keyword" },
+          "testCompletedAt": { "type": "date" },
+          "interpretation": { "type": "text", "analyzer": "vn_analyzer" },
+          "instrumentDetails": {
+            "type": "object",
+            "properties": {
+              "id": { "type": "keyword" },
+              "instrumentCode": { "type": "keyword" },
+              "name": { "type": "text" },
+              "model": { "type": "keyword" },
+              "location": { "type": "keyword" }
+            }
+          },
+          "reagentDetails": {
+            "type": "object",
+            "dynamic": true
+          },
+          "testResults": {
+            "type": "nested",
+            "properties": {
+              "parameterName": { "type": "keyword" },
+              "resultValue": { "type": "double" },
+              "unit": { "type": "keyword" },
+              "referenceLow": { "type": "keyword" },
+              "referenceHigh": { "type": "keyword" },
+              "alertLevel": { "type": "keyword" }
+            }
+          },
+          "status": { "type": "keyword" }
+        }
+      },
+      "clinicalNotes": {
+        "type": "nested",
+        "properties": {
+          "note": { "type": "text", "analyzer": "vn_analyzer" },
+          "createdAt": { "type": "date" },
+          "notedBy": { "type": "keyword" }
+        }
+      }
+    }
+  }
+}

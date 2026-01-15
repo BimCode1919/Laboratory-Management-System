@@ -1,0 +1,115 @@
+<!-- Created with Jaspersoft Studio version 7.0.3.final using JasperReports Library version 7.0.3-41034ca841d452f3305ba55b9042260aaa1ab5dd  -->
+<jasperReport name="TestResultsReport" language="java" pageWidth="1280" pageHeight="842" columnWidth="625" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="924b53e4-24fd-4717-8963-ff7a8b562def">
+	<property name="net.sf.jasperreports.export.xls.detect.cell.type" value="true"/>
+	<property name="net.sf.jasperreports.export.xls.remove.empty.space.between.rows" value="true"/>
+	<property name="net.sf.jasperreports.export.xls.remove.empty.space.between.columns" value="true"/>
+	<property name="net.sf.jasperreports.export.xls.white.page.background" value="false"/>
+	<property name="net.sf.jasperreports.export.xls.ignore.graphics" value="true"/>
+	<property name="net.sf.jasperreports.export.xls.max.row.height" value="50"/>
+	<property name="net.sf.jasperreports.export.xls.collapse.row.spans" value="true"/>
+	<property name="net.sf.jasperreports.export.xls.column.width.ratio" value="1.0"/>
+	<style name="TitleStyle" forecolor="#333333" hTextAlign="Center" vTextAlign="Middle" fontName="Calibri" fontSize="16.0" bold="true"/>
+	<style name="TableHeader" mode="Opaque" forecolor="#FFFFFF" backcolor="#4A90E2" fontName="Calibri" fontSize="12.0" bold="true">
+		<box>
+			<pen lineWidth="0.5" lineColor="#CCCCCC"/>
+		</box>
+	</style>
+	<style name="TableCell" mode="Opaque" backcolor="#FFFFFF" fontName="Calibri" fontSize="10.0">
+		<box>
+			<pen lineWidth="0.5" lineColor="#DDDDDD"/>
+		</box>
+	</style>
+	<style name="TableCellAlt" style="TableCell" backcolor="#F9FBFF"/>
+	<parameter name="orderCode" class="java.lang.String"/>
+	<parameter name="patientName" class="java.lang.String"/>
+	<parameter name="patientCode" class="java.lang.String"/>
+	<parameter name="gender" class="java.lang.String"/>
+	<parameter name="dateOfBirth" class="java.util.Date"/>
+	<parameter name="phoneNumber" class="java.lang.String"/>
+	<parameter name="status" class="java.lang.String"/>
+	<parameter name="createdBy" class="java.lang.String"/>
+	<parameter name="createdOn" class="java.util.Date"/>
+	<parameter name="runOn" class="java.util.Date"/>
+	<parameter name="notes" class="java.lang.String"/>
+	<field name="parameterName" class="java.lang.String"/>
+	<field name="resultValue" class="java.lang.Double"/>
+	<field name="unit" class="java.lang.String"/>
+	<field name="referenceLow" class="java.lang.String"/>
+	<field name="referenceHigh" class="java.lang.String"/>
+	<field name="alertLevel" class="java.lang.String"/>
+	<field name="aiReviewComment" class="java.lang.String"/>
+	<title height="94">
+		<element kind="staticText" uuid="9f14da86-731e-40a7-92df-8945c83341bb" x="308" y="-10" width="625" height="35" fontName="DejaVu Sans" fontSize="24.0" hTextAlign="Center" style="TitleStyle">
+			<text><![CDATA[Test Results Report]]></text>
+		</element>
+		<element kind="textField" uuid="219baf1d-f547-4393-bb12-e70955349d73" x="290" y="35" width="370" height="20" fontName="DejaVu Sans">
+			<expression><![CDATA["Patient Name: " + $P{patientName} + " (Code: " + $P{patientCode} + ")"]]></expression>
+		</element>
+		<element kind="textField" uuid="31574845-a2d7-49f0-af10-ab4ca3741c03" x="695" y="35" width="264" height="20" fontName="DejaVu Sans" hTextAlign="Right">
+			<expression><![CDATA["Test Order: " + $P{orderCode}]]></expression>
+		</element>
+		<element kind="textField" uuid="e6d9d255-6eaf-4190-b3c2-13d5e5a4c77f" x="290" y="55" width="115" height="20" fontName="DejaVu Sans">
+			<expression><![CDATA["Gender: " + $P{gender}]]></expression>
+			<property name="com.jaspersoft.studio.unit.height" value="px"/>
+		</element>
+		<element kind="textField" uuid="54be6f40-098a-4e56-83ed-1bbbbff60c02" x="429" y="55" width="115" height="20" fontName="DejaVu Sans">
+			<expression><![CDATA["DoB: " + $P{dateOfBirth}]]></expression>
+			<property name="com.jaspersoft.studio.unit.height" value="px"/>
+		</element>
+	</title>
+	<columnHeader height="24">
+		<element kind="staticText" uuid="a9f2a028-16cc-4a4d-8c03-62b35efc9f1e" x="135" y="0" width="190" height="24" fontName="DejaVu Sans" bold="true" hTextAlign="Center" style="TableHeader">
+			<text><![CDATA[Parameter]]></text>
+		</element>
+		<element kind="staticText" uuid="b4e438f0-6e3a-478b-8b0a-75cdbb6b82a5" x="325" y="0" width="110" height="24" fontName="DejaVu Sans" bold="true" hTextAlign="Center" style="TableHeader">
+			<text><![CDATA[Result]]></text>
+		</element>
+		<element kind="staticText" uuid="e3fdc4e7-ec02-4f24-bf25-298640c4b46a" x="435" y="0" width="125" height="24" fontName="DejaVu Sans" bold="true" hTextAlign="Center" style="TableHeader">
+			<text><![CDATA[Reference Low]]></text>
+		</element>
+		<element kind="staticText" uuid="5b2ff5a3-09f1-47d4-940d-5425cead1bfb" x="560" y="0" width="135" height="24" fontName="DejaVu Sans" bold="true" hTextAlign="Center" style="TableHeader">
+			<text><![CDATA[Reference High]]></text>
+		</element>
+		<element kind="staticText" uuid="c4d9162e-8478-46f4-bfe8-2de1ac5f8cfb" x="695" y="0" width="80" height="24" fontName="DejaVu Sans" bold="true" hTextAlign="Center" style="TableHeader">
+			<text><![CDATA[Unit]]></text>
+		</element>
+		<element kind="staticText" uuid="70277e79-c01c-4515-9d53-6f87b20edfd3" x="775" y="0" width="90" height="24" fontName="DejaVu Sans" bold="true" hTextAlign="Center" style="TableHeader">
+			<text><![CDATA[Alert]]></text>
+		</element>
+		<element kind="staticText" uuid="57baf611-b72a-4b5d-b36f-d40891e5d6d1" stretchType="ContainerBottom" x="865" y="0" width="320" height="24" fontName="DejaVu Sans" printWhenDetailOverflows="true" bold="true" hTextAlign="Center" style="TableHeader">
+			<text><![CDATA[AI Review Comment]]></text>
+		</element>
+	</columnHeader>
+	<detail>
+		<band height="68" splitType="Stretch">
+			<element kind="textField" uuid="c52e6bef-7faa-4aa9-ab0d-e58e8ecc6451" stretchType="ContainerHeight" x="865" y="0" width="320" height="22" fontName="DejaVu Sans" textAdjust="StretchHeight" blankWhenNull="true" printWhenDetailOverflows="true" vTextAlign="Top" style="TableCell">
+				<paragraph leftIndent="4" rightIndent="4"/>
+				<expression><![CDATA[$F{aiReviewComment}]]></expression>
+			</element>
+			<element kind="textField" uuid="b5a3e86a-6e3b-4a9e-9ad9-523fdb3729d4" stretchType="ContainerHeight" x="135" y="0" width="190" height="22" fontName="DejaVu Sans" textAdjust="StretchHeight" vTextAlign="Middle" style="TableCell">
+				<paragraph leftIndent="4" rightIndent="4"/>
+				<expression><![CDATA[$F{parameterName}]]></expression>
+			</element>
+			<element kind="textField" uuid="85a0dd24-1fcd-43cb-a05c-3d78a20f7f07" stretchType="ContainerHeight" x="325" y="0" width="110" height="22" fontName="DejaVu Sans" textAdjust="StretchHeight" hTextAlign="Right" vTextAlign="Middle" style="TableCell">
+				<paragraph leftIndent="4" rightIndent="4"/>
+				<expression><![CDATA[$F{resultValue}]]></expression>
+			</element>
+			<element kind="textField" uuid="ec1298a5-b35b-47f8-bcd0-d8250df71c4b" stretchType="ContainerHeight" x="435" y="0" width="125" height="22" fontName="DejaVu Sans" textAdjust="StretchHeight" vTextAlign="Middle" style="TableCell">
+				<paragraph leftIndent="4" rightIndent="4"/>
+				<expression><![CDATA[$F{referenceLow}]]></expression>
+			</element>
+			<element kind="textField" uuid="ca2587a9-147b-46d0-a57a-d86d456ffdc8" stretchType="ContainerHeight" x="560" y="0" width="135" height="22" fontName="DejaVu Sans" textAdjust="StretchHeight" vTextAlign="Middle" style="TableCell">
+				<paragraph leftIndent="4" rightIndent="4"/>
+				<expression><![CDATA[$F{referenceHigh}]]></expression>
+			</element>
+			<element kind="textField" uuid="b6ffba1c-1225-45cf-815c-4a34e1d435ef" stretchType="ContainerHeight" x="695" y="0" width="80" height="22" fontName="DejaVu Sans" textAdjust="StretchHeight" hTextAlign="Center" vTextAlign="Middle" style="TableCell">
+				<paragraph leftIndent="4" rightIndent="4"/>
+				<expression><![CDATA[$F{unit}]]></expression>
+			</element>
+			<element kind="textField" uuid="cccb446a-bfc4-4ec7-b48d-c0a4a3e4977b" stretchType="ContainerHeight" x="775" y="0" width="90" height="22" fontName="DejaVu Sans" textAdjust="StretchHeight" hTextAlign="Center" vTextAlign="Middle" style="TableCell">
+				<paragraph leftIndent="4" rightIndent="4"/>
+				<expression><![CDATA[$F{alertLevel}]]></expression>
+			</element>
+		</band>
+	</detail>
+</jasperReport>

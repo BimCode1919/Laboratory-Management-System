@@ -1,0 +1,36 @@
+syntax = "proto3";
+
+option java_multiple_files = true;
+option java_package = "org.overcode250204.common.grpc";
+option java_outer_classname = "PatientServiceProto";
+
+package patient;
+
+service PatientService {
+  rpc ensurePatient(PatientIdentityInfo) returns (PatientRecord);
+}
+
+message PatientIdentityInfo {
+  string fullName = 1;
+  string dob = 2;
+  string phone = 3;
+  string email = 4;
+  string gender = 5;
+  string address = 6;
+  string age = 7;
+  string createdByLabUser = 8;
+}
+
+message PatientRecord {
+  string patientId = 1;
+  string patientCode = 2;
+  string medicalRecordId = 3;
+  string fullName = 4;
+  string dob = 5;
+  string email = 6;
+  string address = 7;
+  string phone = 8;
+  string gender = 9;
+  string age = 10;
+  bool createdNew = 11;
+}

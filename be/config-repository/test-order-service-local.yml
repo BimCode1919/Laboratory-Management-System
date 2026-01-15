@@ -1,0 +1,53 @@
+server:
+  port: ${TEST_ORDER_SERVICE_PORT}
+
+eureka:
+  instance:
+    hostname: ${INSTANCE_HOST}
+    prefer-ip-address: ${PREFER_IP_ADDRESS}
+  client:
+    register-with-eureka: true
+    fetch-registry: true
+    service-url:
+      defaultZone: ${EUREKA_CLIENT_SERVICE_URL_DEFAULT_ZONE}
+
+grpc:
+  server:
+    port: 6667
+    in-process-name: test-order-service
+    security:
+      enabled: false
+    negotiation-type: plaintext
+  client:
+    iam-service:
+      address: ${GRPC_IAM_SERVER_CALL}
+      negotiationType: plaintext
+    patient-service:
+      address: ${GRPC_PATIENT-SERVER_CALL}
+      negotiationType: plaintext
+    monitoring-service:
+      address: ${GRPC_MONITORING_SERVER_CALL}
+      negotiationType: plaintext
+
+
+spring:
+  datasource:
+    url: ${TESTORDER_SERVICE_DATABASE_URL}
+    username: ${TESTORDER_SERVICE_USERNAME}
+    password: ${TESTORDER_SERVICE_PASSWORD}
+  jpa:
+    database-platform: org.hibernate.dialect.PostgreSQLDialect
+    hibernate:
+      dialect: ${DIALECT_POSTGRESQL}
+      ddl-auto: ${SPRING_JPA_HIBERNATE_DDL_AUTO}
+    show-sql: ${SPRING_JPA_SHOW_SQL}
+
+
+prefix-order-code: ${PREFIX_ORDER_CODE}
+
+
+management:
+  metrics:
+    tags:
+      environment: local
+      application: test-order-service

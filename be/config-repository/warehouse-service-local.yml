@@ -1,0 +1,42 @@
+server:
+  port: ${WAREHOUSE_SERVICE_PORT}
+
+eureka:
+  instance:
+    hostname: ${INSTANCE_HOST}
+    prefer-ip-address: ${PREFER_IP_ADDRESS}
+  client:
+    register-with-eureka: true
+    fetch-registry: true
+    service-url:
+      defaultZone: ${EUREKA_CLIENT_SERVICE_URL_DEFAULT_ZONE}
+
+spring:
+  datasource:
+    url: ${WAREHOUSE_SERVICE_DATABASE_URL}
+    username: ${WAREHOUSE_SERVICE_USERNAME}
+    password: ${WAREHOUSE_SERVICE_PASSWORD}
+  jpa:
+    database-platform: org.hibernate.dialect.PostgreSQLDialect
+    hibernate:
+      dialect: ${DIALECT_POSTGRESQL}
+      ddl-auto: ${SPRING_JPA_HIBERNATE_DDL_AUTO}
+    show-sql: ${SPRING_JPA_SHOW_SQL}
+
+grpc:
+  server:
+    port: 6669
+    in-process-name: warehouse-service
+    security:
+      enabled: false
+    negotiation-type: plaintext
+  client:
+    iam-service:
+      address: ${GRPC_IAM_SERVER_CALL}
+      negotiationType: plaintext
+
+management:
+  metrics:
+    tags:
+      environment: local
+      application: warehouse-service

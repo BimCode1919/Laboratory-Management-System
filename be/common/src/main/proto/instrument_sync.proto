@@ -1,0 +1,35 @@
+syntax = "proto3";
+
+option java_multiple_files = true;
+option java_package = "org.overcode250204.common.grpc";
+option java_outer_classname = "InstrumentSyncProto";
+import "google/protobuf/timestamp.proto";
+
+package instrument;
+
+
+message InstrumentSyncUpRequest {
+  string instrumentId = 1;
+  repeated string runIds = 2;
+  string testOrderId = 3;
+  string barcode = 4;
+  int32 limit = 5;
+}
+
+
+message RawTestResultMessage {
+  string testOrderId = 1;
+  string runId = 2;
+  string barcode = 3;
+  string hl7Message = 4;
+  bool backedUp = 5;
+  string status = 6;
+  string testType = 7;
+  google.protobuf.Timestamp createdAt = 8;
+  string instrumentCode = 9;
+}
+
+
+service InstrumentSyncService {
+  rpc SyncUpTestResults (InstrumentSyncUpRequest) returns (stream RawTestResultMessage);
+}

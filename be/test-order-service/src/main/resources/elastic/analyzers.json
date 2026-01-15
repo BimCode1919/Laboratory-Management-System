@@ -1,0 +1,96 @@
+{
+  "settings": {
+    "index.max_ngram_diff": 10,
+    "analysis": {
+      "filter": {
+        "vietnamese_stop": {
+          "type": "stop",
+          "stopwords": "_vietnamese_"
+        }
+      },
+      "analyzer": {
+
+        "vietnamese_analyzer": {
+          "tokenizer": "standard",
+          "filter": [
+            "lowercase",
+            "asciifolding",
+            "vietnamese_stop"
+          ]
+        },
+
+        "autocomplete_analyzer": {
+          "tokenizer": "autocomplete_tokenizer",
+          "filter": [
+            "lowercase",
+            "asciifolding"
+          ]
+        }
+      },
+      "tokenizer": {
+        "autocomplete_tokenizer": {
+          "type": "ngram",
+          "min_gram": 2,
+          "max_gram": 10,
+          "token_chars": [
+            "letter",
+            "digit"
+          ]
+        }
+      }
+    }
+  },
+  "mappings": {
+    "properties": {
+      "patientFullName": {
+        "type": "text",
+        "analyzer": "vietnamese_analyzer",
+        "fields": {
+          "suggest": {
+            "type": "text",
+            "analyzer": "autocomplete_analyzer"
+          }
+        }
+      },
+      "notes": {
+        "type": "text",
+        "analyzer": "vietnamese_analyzer"
+      },
+      "createdAt": {
+        "type": "date",
+        "format": "date_hour_minute_second"
+      },
+      "reviewedAt": {
+        "type": "date",
+        "format": "date_hour_minute_second"
+      },
+      "patientDateOfBirth": {
+        "type": "date",
+        "format": "strict_date"
+      },
+      "orderCode": { "type": "keyword" },
+      "barCode": { "type": "keyword" },
+      "status": { "type": "keyword" },
+      "priority": { "type": "keyword" },
+      "testType": { "type": "keyword" },
+      "patientId": { "type": "keyword" },
+      "patientCode": { "type": "keyword" },
+      "patientGender": { "type": "keyword" },
+      "patientPhoneNumber": { "type": "keyword" },
+      "createdBy": { "type": "keyword" },
+      "reviewedBy": { "type": "keyword" },
+      "medicalRecordId": { "type": "keyword" },
+      "results": {
+        "type": "nested",
+        "properties": {
+          "parameterName": { "type": "keyword" },
+          "status": { "type": "keyword" },
+          "resultValue": { "type": "double" },
+          "unit": { "type": "keyword" },
+          "aiHasIssue": { "type": "boolean" },
+          "aiReviewComment": { "type": "text", "analyzer": "vietnamese_analyzer" }
+        }
+      }
+    }
+  }
+}
